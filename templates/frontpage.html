@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+
+<body>
+
+{% include "header.html" %}
+
+<div class="block">
+  <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
+  <div class="centered">Categories</div>
+</div>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+  <div class="flash">
+    {{message}}
+  </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+
+
+<div class="categories">
+  {% for i in categories %}
+  <a href="{{url_for('itemsPage', category = i.id)}}" class="category link">
+    {{i.name}}
+  </a>
+  {% endfor %}
+</div>
+
+
+<div class="recent_items">
+  {% for i in latest_items %}
+  <div class="item">
+    <a href="{{url_for('itemPage', category = i.cat_id, item = i.id)}}" class="category link">
+      {{i.name}}
+    </a>
+    <p class="item_name">
+      added {{i.time_updated}}
+    </p>
+  </div>
+  {% endfor %}
+</div>
+
+
+</body>
+
+</html>

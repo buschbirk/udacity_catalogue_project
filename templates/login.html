@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+  </script>
+
+<script src="//apis.google.com/js/platform.js?onload=start"> </script>
+
+<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+
+
+</head>
+
+
+<body>
+
+
+<!-- GOOGLE PLUS SIGN IN BUTTON-->
+
+
+<div id="signinButton">
+  <span class="g-signin"
+    data-scope="openid email"
+    data-clientid="494634085845-vcjgbpklmfn8afjrqg6rj637ults7t4s.apps.googleusercontent.com"
+    data-redirecturi="postmessage"
+    data-accesstype="offline"
+    data-cookiepolicy="single_host_origin"
+    data-callback="signInCallback"
+    data-approvalprompt="force">
+  </span>
+</div>
+<div id="result"></div>
+
+<!--END GOOGLE PLUS SIGN IN BUTTON -->
+<script>
+  function signInCallback(authResult) {
+    if (authResult['code']) {
+      //hide the sign-in BUTTON
+      $('#signinButton').attr('style', 'display: none');
+      //send the one-time code to the server, if the server responds,
+      //write a 'login succesful' message to the page
+      //and then redirect back to the main restaurants postmessage
+      $.ajax({
+        type: 'POST',
+        url: '/gconnect?state={{STATE}}',
+        processData: false,
+        contentType: 'application/octet-stream; charset=utf-8',
+        data: authResult['code'],
+        success: function(result) {
+          if (result) {
+            $('#result').html('Login Successful! </br>' + result + '</br>Redirecting...')
+          setTimeout(function() {
+            window.location.href = '/restaurant';
+          }, 4000);
+        } else if (authResult['error']) {
+          console.log('There was an error: ' + authResult['error']);
+        } else {
+          $('#result').html('Failed to make a server-side call. \
+                            Check your configuration and console')
+        }
+        }
+      })
+    }
+  }
+
+</script>
+
+
+<div id="status">
+</div>
+
+</body>
+
+</html>
