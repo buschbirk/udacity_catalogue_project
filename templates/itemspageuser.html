@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+
+<body>
+
+{% include "header.html" %}
+
+<div class="block">
+  <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
+  <div class="centered">{{category.name}}</div>
+</div>
+
+
+<div class="categories">
+  <h1>Categories</h1>
+  {% for i in categories %}
+    {% if i.name == category.name %}
+      <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link" style="color: black; font-weight: 800;">
+        {{i.name}}
+      </a>
+    {% else %}
+      <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link">
+        {{i.name}}
+      </a>
+    {% endif %}
+  {% endfor %}
+  <a href="{{url_for('addItem', category="none")}}" class="add_new">Add new category</a>
+</div>
+
+
+<div class="recent_items">
+  <h1>{{category.name}} items: ({{len_items}} items)</h1>
+  {% for i in items %}
+  <div class="item">
+    <a href="{{url_for('itemPage', category = category.name.replace(" ", "-"), item_name = i.name.replace(" ", "-"))}}" class="category link">
+      {{i.name}}
+    </a>
+  </div>
+  {% endfor %}
+  <a href="{{url_for('addItem', category="none")}}" class="add_new">Add new item</a>
+</div>
+
+<div class="clear"></div>
+</body>
+
+</html>

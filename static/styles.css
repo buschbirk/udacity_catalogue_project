@@ -15,24 +15,30 @@ h1,
 h2,
 h3,
 h4 {
-    color: #ffffff;
+    color: #0000009c;
 }
 
 h1,
 h2 {
-    font-family: 'georgia', serif;
     margin: 0;
     margin-bottom: 1em;
 }
 
 h1 {
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid #2e3d4933;
+    font-weight: 100;
 }
 
 h2 {
     font-size: 1.2em;
 }
 
+header {
+  display: block;
+  width: 100%;
+  padding: 1.5em 0;
+  background-color: #f3feff;
+}
 
 p,
 dd,
@@ -43,7 +49,7 @@ dt {
 a {
     text-decoration: none;
     color: #ffffcc;
-    font-size: .75em;
+    font-size: 1em;
 }
 
 .block {
@@ -65,11 +71,13 @@ a {
   padding: 1em;
   width: 35%;
   float: left;
-  border-right: solid 2px gray;
+  border-right: solid 2px #80808024;
 }
 
 .recent_items {
   float: left;
+  padding: 1em;
+  width: 50%;
 }
 
 .pane {
@@ -110,7 +118,7 @@ a {
 
 .item_desc {
   width: 60%;
-  margin: 0 auto;
+  margin: 0 auto 6em;
   color: #929292;
 }
 
@@ -140,14 +148,28 @@ a {
   text-align: center;
 }
 
+.header_left {
+  padding-left: 1em;
+  font-size: 1em;
+  color: black;
+}
+
+.header_right {
+  float: right;
+  padding-right: 1em;
+  color: black;
+  text-decoration: underline;
+  font-size: 1em;
+}
+
 .link {
-  background-color: #80808008;
   padding-top: 1.5em;
   padding-bottom: 1.5em;
-  color: #06b3e4;
-  text-transform: uppercase;
+  color: #5f445e;
   float: left;
   clear: both;
+  width: 100%;
+  border-bottom: solid 1px #06b3e440;
 }
 
 .link:hover {
@@ -173,12 +195,14 @@ a {
   padding: 1.5em;
   background-color: #06b3e4;
   display: block;
-  width: 25%;
-  margin: 2em auto;
+  width: 150px;
   color: white;
   text-align: center;
   border-radius: 5px;
-  box-shadow: 5px 5px 25px 0px rgba(46,61,73,0.2)
+  box-shadow: 5px 5px 25px 0px rgba(46,61,73,0.2);
+  clear: both;
+  float: left;
+  margin-top: 1em;
 }
 
 .add_new:hover {
@@ -227,8 +251,11 @@ a {
   margin-top: 3em;
 }
 
+
+
 #button {
   border: 0;
-  font-size: 12;
+  font-size: 1em;
   cursor: pointer;
+  background-color: white;
 }

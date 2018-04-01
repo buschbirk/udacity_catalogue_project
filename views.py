@@ -42,47 +42,62 @@ session = DBSession()
 def frontPage():
     
     categories = session.query(Categories).all()
-    items = session.query(Item).all()
+    items = session.query(Item).order_by("time_updated DESC").limit(len(categories))
     
     if 'access_token' in login_session:
-        return render_template('frontpageuser.html', categories = categories)
+        flash("You are logged in as: " +login_session['username'])
+        return render_template('frontpageuser.html', 
+                               categories = categories,
+                               latest_items = items,
+                               getCatName=lambda x: getCatName(x))
     else:
         return render_template('frontpage.html', 
                                categories = categories, 
-                               latest_items = items)
+                               latest_items = items,
+                               getCatName=lambda x: getCatName(x),
+                               session = login_session)
 
 
 @app.route('/catalog/<category>/items')
 def itemsPage(category):
     
     all_categories = session.query(Categories).all()
-    cat = session.query(Categories).filter_by(name = category).one()
+    cat = session.query(Categories).filter_by(name = category.replace("-", " ")).first()
     items = session.query(Item).filter_by(cat_id = cat.id).all()
     
     if 'access_token' in login_session:
-        return render_template('itemspageuser.html')
-    else:
-        return render_template('frontpage.html',
+        return render_template('itemspageuser.html',
                                categories = all_categories,
-                               items = items)
+                               items = items,
+                               category = cat,
+                               len_items = str(len(items)))
+    else:
+        return render_template('itemspage.html',
+                               categories = all_categories,
+                               items = items,
+                               category = cat,
+                               len_items = str(len(items)))
         #return render_template('itemspage.html')
 
 
+
+
 @app.route('/catalog/<category>/items/add', methods=['GET', 'POST'])
-def itemsPage(category):
+def addItem(category):
     
     if request.method == 'GET':
-        all_categories = session.query(Categories).all()
-        cat = session.query(Categories).filter_by(name = category).one()
-        items = session.query(Item).filter_by(cat_id = cat.id).all()
         
         if 'access_token' in login_session:
-            return render_template('itemspageuser.html')
+            categories = session.query(Categories).all()
+            return render_template('addItem.html',
+                                   categories = categories,
+                                   category_name = category)
+        elif category == 'none':
+            flash("Please log in to add and edit items")
+            return redirect(url_for('frontPage'))
         else:
-            return render_template('frontpage.html',
-                                   categories = all_categories,
-                                   items = items)
-            #return render_template('itemspage.html')
+            flash("Please log in to add and edit items")
+            return redirect(url_for('itemsPage', category = category))
     
     if request.method == 'POST':
         if not request.form['name']:
@@ -91,55 +106,67 @@ def itemsPage(category):
         else:
             name = request.form['name']
             description = request.form['description']
-            cat_name = request.form['category']
-            cat_ = session.query(Categories).filter_by(name = cat_name).one()
+            cat_id = request.form['category']
+            print("Category name is " +cat_id)
+            cat_ = session.query(Categories).filter_by(id = cat_id).one()
             timestamp = dt.now()
             user = getUserInfo(login_session['user_id'])
             
-            new_item = Item(name = name, description = description,
+            new_item = Item(name = name, 
+                            description = description,
                             time_updated = timestamp,
                             user = user,
-                            category = cat)
+                            category = cat_)
+            
             session.add(new_item)
             session.commit()
+            flash("Successfully added item: " +new_item.name)
             
+            return redirect(url_for('frontPage'))
             
-#        if request.form['description']:
-#            editedItem.description = request.form['description']
-#        if request.form['price']:
-#            editedItem.price = request.form['price']
-#        if request.form['course']:
-#            editedItem.course = request.form['course']
-#        session.add(editedItem)
-#        session.commit() 
+
         
         
         
-@app.route('/catalogue/<category>/<item_name>/')
+@app.route('/catalog/<category>/<item_name>/')
 def itemPage(category, item_name):
     
-    cat = session.query(Categories).filter_by(name = category).one()
-    item = session.query(Item).filter_by(name = item_name, cat_id = cat.id).one()
+    cat = session.query(Categories).filter_by(name = category.replace("-"," ")).first()
+    item = session.query(Item).filter_by(name = item_name.replace("-", " "), 
+                                         cat_id = cat.id).first()
     
     if 'access_token' in login_session:
-        return render_template('itempageuser.html')
+        return render_template('itempageuser.html',
+                               item = item,
+                               category = category)
     else:
-        return render_template('itempage.html')
+        return render_template('itempage.html',
+                               item = item)
 
 
-@app.route('/catalogue/<category>/<item_name>/edit', methods=['GET', 'POST'])
+@app.route('/catalog/<category>/<item_name>/edit', methods=['GET', 'POST'])
 def editItem(category, item_name):
     
-    cat = session.query(Categories).filter_by(name = category).one()
-    item = session.query(Item).filter_by(name = item_name, cat_id = cat.id).one()    
+    cat = session.query(Categories).filter_by(name = category.replace("-", " ")).one()
+    item = session.query(Item).filter_by(name = item_name.replace("-", " "), cat_id = cat.id).one()
     
     if request.method == 'GET':        
-        return render_template('edititem.html')
+        if 'access_token' in login_session:
+            categories = session.query(Categories).all()
+            return render_template('editItem.html',
+                                   categories = categories,
+                                   item = item)
+        else:
+            flash("Please log in to add and edit items")
+            return redirect(url_for('itemsPage', category = category))
+        
     elif request.method == 'POST':
         if request.form['name']:
             item.name = request.form['name']
         if request.form['description']:
             item.description = request.form['description']
+        if request.form['category']:
+            item.cat_id = int(request.form['category'])
         
         item.time_updated = dt.now()
         session.add(item)
@@ -148,6 +175,26 @@ def editItem(category, item_name):
         return redirect(url_for('itemPage', 
                                 category = category, 
                                 item_name = item_name))
+
+
+@app.route('/catalog/<category>/<item_name>/delete', methods=['GET', 'POST'])
+def deleteItem(category, item_name):
+    
+    cat = session.query(Categories).filter_by(name = category.replace("-", " ")).one()
+    item = session.query(Item).filter_by(name = item_name.replace("-", " "), cat_id = cat.id).one()    
+    
+    if request.method == 'GET':        
+        return render_template('deleteitem.html',
+                               category = category,
+                               item_name = item_name)
+    elif request.method == 'POST':        
+
+        session.delete(item)
+        session.commit()
+        flash("Successfully deleted item: " +item.name)
+        
+        return redirect(url_for('itemsPage', 
+                                category = category,))
 
 
 @app.route('/login')
@@ -169,7 +216,7 @@ def logout():
         r = requests.post(url, params={'token': access_token},
                           headers = {'content-type': 'application/x-www-form-urlencoded'})
         
-        if r.status_code == '200':
+        if r.status_code == 200:
             # Reset the user's session
             del login_session['access_token']
             del login_session['username']
@@ -179,6 +226,8 @@ def logout():
             return redirect(url_for('frontPage'))
         else:
             flash("It looks like you were not logged in")
+            print("Unsuccessful login. Status code: " +str(r.status_code))
+            print("response content: " + r.content)
             return redirect(url_for('frontPage'))            
         
         
@@ -274,7 +323,14 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print("Finished Oauth flow")
     
-    return redirect(url_for('frontPage'))    
+    return redirect(url_for('frontPage'))
+
+
+@app.context_processor
+# inject login_session to header for all templates
+def inject_session():
+    return dict(session=login_session)
+
 
 
 def createUser(login_session):
@@ -297,6 +353,11 @@ def getUserId(email):
         return user.id
     except:
         return None
+
+def getCatName(catId):
+    category = session.query(Categories).filter_by(id = catId).one()
+    return category.name
+
 
 
 if __name__ == '__main__':

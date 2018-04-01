@@ -42,7 +42,7 @@ session.commit()
 Item1 = Item(name="Veggie Burger", 
              description="Juicy grilled veggie patty with tomato mayo and lettuce",
              time_updated = dt.now(),
-             category=category1, 
+             category=category1,
              user = user1)
 
 session.add(Item1)

@@ -1,0 +1,40 @@
+<html>
+<head>
+  <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+<body>
+
+<div class="block">
+  <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
+  <div class="centered">Add Menu Item</div>
+</div>
+
+<form action="{{url_for('addItem', category="none")}}" method = 'POST'>
+
+<div class="menu_item">
+
+  <p class="edit_text">Name:</p>
+  <input class="input_text" type='text' size='30' name='name' placeholder="{{item.name}}">
+
+  <p class="edit_text">Description:</p>
+  <input class="input_text" type='text' size='30' name='description' placeholder="{{item.description}}">
+
+  <p class="edit_text">Category:</p>
+  <select class="input_text last" name="category">
+    {% for i in categories %}
+      {% if i.id == item.cat_id %}
+        <option value="{{i.id}}" selected="selected">{{i.name}}</option>
+      {% else %}
+        <option value="{{i.id}}">{{i.name}}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+
+  <input type='submit' value='Submit' class="link left" id="button">
+  <a href='{{ url_for('frontPage') }}' class="link right">Cancel</a>
+</div>
+
+</form>
+
+</body>
+</html>

@@ -1,3 +1,18 @@
-<div class="flash">
-	Item catalogue - <a href="{{url_for('showLogin')}}">Login</a>
-</div>
+<header>
+	<a href="/" class="header_left">ITEM CATALOGUE</a>
+	{% if 'username' in session %}
+		<a href="{{url_for('logout')}}" class="header_right">LOG OUT</a>
+	{% else %}
+		<a href="{{url_for('showLogin')}}" class="header_right">LOG IN</a>
+	{% endif %}
+</header>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+  <div class="flash">
+    {{message}}
+  </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}

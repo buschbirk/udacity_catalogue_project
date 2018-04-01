@@ -1,0 +1,27 @@
+<html>
+<head>
+  <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+<body>
+
+<div class="block">
+  <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
+  <div class="centered">{{item.name}}</div>
+</div>
+
+<div class="menu_item">
+
+  <p class="item_title">{{item.name}}</p>
+
+  <p class="edit_text">Description:</p>
+  <p class="item_desc">{{item.description}}</p>
+  <!--
+  <input type='submit' value='Submit Changes' class="link left" id="button">
+  <a href='{{ url_for('frontPage') }}' class="link right">Cancel</a>
+  -->
+</div>
+
+</form>
+
+</body>
+</html>
