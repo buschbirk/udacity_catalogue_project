@@ -40,6 +40,10 @@ header {
   background-color: #f3feff;
 }
 
+hr {
+  border-bottom: solid 1px #06b3e440;
+}
+
 p,
 dd,
 dt {
@@ -48,9 +52,12 @@ dt {
 
 a {
     text-decoration: none;
-    color: #ffffcc;
+    color: black;
     font-size: 1em;
+    margin-right: 1em;
 }
+
+
 
 .block {
   position: relative;
@@ -67,12 +74,35 @@ a {
     text-shadow: 5px 4px 4px #000000;
 }
 
+
+.link {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+  color: #5f445e;
+  float: left;
+  clear: both;
+  width: 100%;
+  border-bottom: solid 1px #06b3e440;
+}
+
+.link:hover {
+  background-color: #80808021;
+}
+
 .categories {
   padding: 1em;
   width: 35%;
   float: left;
   border-right: solid 2px #80808024;
 }
+
+.highlight {
+  color: black;
+  font-weight: 800;
+  border-bottom: 0;
+}
+
+
 
 .recent_items {
   float: left;
@@ -118,7 +148,7 @@ a {
 
 .item_desc {
   width: 60%;
-  margin: 0 auto 6em;
+  margin: 0 auto 2em;
   color: #929292;
 }
 
@@ -162,23 +192,10 @@ a {
   font-size: 1em;
 }
 
-.link {
-  padding-top: 1.5em;
-  padding-bottom: 1.5em;
-  color: #5f445e;
-  float: left;
-  clear: both;
-  width: 100%;
-  border-bottom: solid 1px #06b3e440;
-}
 
-.link:hover {
-  background-color: #80808021;
-}
 
 .left {
   width: 50%;
-  position: absolute;
   bottom: 0;
   left: 0;
   border-right: 1px solid #06b3e438;
@@ -236,11 +253,9 @@ a {
   text-align: center;
   box-shadow: 0px 5px 25px -1px rgba(46,61,73,0.2);
   margin: 0 auto 2em;
+  color: #6f6d6d;
 }
 
-.last {
-  margin-bottom: 5em;
-}
 
 .edit_text {
   margin: 1em auto;
@@ -251,7 +266,11 @@ a {
   margin-top: 3em;
 }
 
-
+.area {
+  font-size: 1em;
+  width: 20em;
+  height: 100px;
+}
 
 #button {
   border: 0;

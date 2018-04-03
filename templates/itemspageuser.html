@@ -18,16 +18,19 @@
   <h1>Categories</h1>
   {% for i in categories %}
     {% if i.name == category.name %}
-      <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link" style="color: black; font-weight: 800;">
+      <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link highlight" style="color: black; font-weight: 800;">
         {{i.name}}
       </a>
+      <a href='{{ url_for('editCategory', category = category.name.replace(" ", "-")) }}'>Edit</a>
+      <a href='{{ url_for('deleteCategory', category = category.name.replace(" ", "-")) }}'>Delete</a>
+      <hr />
     {% else %}
       <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link">
         {{i.name}}
       </a>
     {% endif %}
   {% endfor %}
-  <a href="{{url_for('addItem', category="none")}}" class="add_new">Add new category</a>
+  <a href="{{url_for('addItem', category = category.name.replace(" ","-"))}}" class="add_new">Add new category</a>
 </div>
 
 
@@ -40,7 +43,7 @@
     </a>
   </div>
   {% endfor %}
-  <a href="{{url_for('addItem', category="none")}}" class="add_new">Add new item</a>
+  <a href="{{url_for('addItem', category= category.name.replace(" ", "-"))}}" class="add_new">Add new item</a>
 </div>
 
 <div class="clear"></div>

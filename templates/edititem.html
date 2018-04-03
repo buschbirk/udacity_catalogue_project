@@ -6,18 +6,15 @@
 
 <div class="block">
   <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
-  <div class="centered">Add Menu Item</div>
+  <div class="centered">Edit Menu Item</div>
 </div>
 
-<form action="{{url_for('addItem', category="none")}}" method = 'POST'>
+<form action="{{url_for('editItem', category = category, item_name = item.name.replace(" ", "-"))}}" method = 'POST'>
 
 <div class="menu_item">
 
   <p class="edit_text">Name:</p>
   <input class="input_text" type='text' size='30' name='name' placeholder="{{item.name}}">
-
-  <p class="edit_text">Description:</p>
-  <input class="input_text" type='text' size='30' name='description' placeholder="{{item.description}}">
 
   <p class="edit_text">Category:</p>
   <select class="input_text last" name="category">
@@ -29,6 +26,9 @@
       {% endif %}
     {% endfor %}
   </select>
+
+  <p class="edit_text">Description:</p>
+  <textarea class="input_text area" maxlength="250" rows="3" name="description">{{item.description}}</textarea>
 
   <input type='submit' value='Submit' class="link left" id="button">
   <a href='{{ url_for('frontPage') }}' class="link right">Cancel</a>

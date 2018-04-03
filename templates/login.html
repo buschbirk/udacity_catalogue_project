@@ -62,7 +62,7 @@
         success: function(result) {
           if (result) {
             console.log("Succesful login attempt");
-            window.location.replace("/");
+            window.location.replace("/catalog/auth_completed");
         } else if (authResult['error']) {
           console.log('There was an error: ' + authResult['error']);
         } else {
