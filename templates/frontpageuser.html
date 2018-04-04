@@ -1,12 +1,5 @@
-<html>
-
-<head>
-  <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
-</head>
-
-<body>
-
-{% include "header.html" %}
+{% extends "main.html" %}
+{% block content %}
 
 <div class="block">
   <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
@@ -38,6 +31,5 @@
 </div>
 
 <div class="clear"></div>
-</body>
 
-</html>
+{% endblock %}

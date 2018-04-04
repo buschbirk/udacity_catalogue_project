@@ -1,9 +1,6 @@
-<html>
-<head>
-  <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
-</head>
+{% extends "main.html" %}
+{% block content %}
 
-<body>
 <div class="block">
   <img src="{{url_for('static', filename='img/food_narrow.jpg')}}" alt="a picture" style="width:100%;">
   <div class="centered">Delete category</div>
@@ -22,6 +19,4 @@
 
 </form>
 
-</body>
-
-</html>
+{% endblock %}
