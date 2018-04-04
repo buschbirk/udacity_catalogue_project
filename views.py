@@ -63,6 +63,14 @@ def authFinished():
     return redirect(url_for('frontPage'))
 
 
+@app.route('/catalog.json')
+def catalogJson():
+    
+    categories = session.query(Categories).all()
+    
+    return jsonify(Categories = [i.serialize for i in categories])
+
+
 @app.route('/catalog/<category>/items/')
 def itemsPage(category):
     
@@ -82,6 +90,15 @@ def itemsPage(category):
                                items = items,
                                category = cat,
                                len_items = str(len(items)))
+
+
+@app.route('/catalog/<category>/items.json/')
+def categoryJson(category):
+    
+    cat = session.query(Categories).filter_by(name = category.replace("-", " ")).first()
+
+    return jsonify(cat.serialize)
+    
 
 
 @app.route('/catalog/category/add/', methods=['GET', 'POST'])
@@ -152,7 +169,6 @@ def deleteCategory(category):
         session.commit()
         return redirect(url_for('frontPage'))
 
-
         
 @app.route('/catalog/<category>/items/<item_name>/')
 def itemPage(category, item_name):
@@ -161,7 +177,13 @@ def itemPage(category, item_name):
     item = session.query(Item).filter_by(name = item_name.replace("-", " "), 
                                          cat_id = cat.id).first()
     
-    if 'access_token' in login_session:
+    if item_name.endswith('.json'):
+        item = session.query(Item).filter_by(name = item_name.split(".")[0]\
+                                            .replace("-", " "), 
+                                            cat_id = cat.id).first()
+        return jsonify(item.serialize)
+    
+    elif 'access_token' in login_session:
         return render_template('itempageuser.html',
                                item = item,
                                category = category)
@@ -195,7 +217,6 @@ def addItem(category):
             name = request.form['name']
             description = request.form['description']
             cat_id = request.form['category']
-            print("Category name is " +cat_id)
             cat_ = session.query(Categories).filter_by(id = cat_id).one()
             timestamp = dt.now()
             user = getUserInfo(login_session['user_id'])
@@ -327,7 +348,6 @@ def gconnect():
     
     # Check that access token is valid
     access_token = credentials.access_token
-    print(str(access_token))
 
     url = ('https://www.googleapis.com/oauth2/v3/tokeninfo?' +
            "access_token=%s" % access_token)
@@ -335,7 +355,6 @@ def gconnect():
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
 
-    print(result)
     
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
@@ -348,7 +367,6 @@ def gconnect():
     
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
-    print(gplus_id)
     
     if result['sub'] != gplus_id:
         response = make_response(

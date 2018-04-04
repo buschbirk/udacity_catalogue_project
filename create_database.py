@@ -9,7 +9,8 @@ from sqlalchemy import Column, ForeignKey, Integer, String, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
- 
+from sqlalchemy.orm import sessionmaker 
+
 Base = declarative_base()
 
 class User(Base):
@@ -32,10 +33,12 @@ class Categories(Base):
     @property
     def serialize(self):
        """Return object data in easily serializeable format"""
+       items = session.query(Item).filter_by(cat_id = self.id).all()
+       
        return {
            'name'         : self.name,
            'id'           : self.id,
-           'user_id'      : self.user_id
+           'items'        : [i.serialize for i in items]
        }
  
 class Item(Base):
@@ -72,3 +75,6 @@ engine = create_engine('sqlite:///item_catalogue.db')
  
 
 Base.metadata.create_all(engine)
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
