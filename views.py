@@ -31,7 +31,7 @@ CLIENT_ID = json.loads(
 
 
 #Connect to Database and create database session
-engine = create_engine('sqlite:///item_catalogue.db')
+engine = create_engine('sqlite:///catalogue.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -240,10 +240,11 @@ def editItem(category, item_name):
     cat = session.query(Categories).filter_by(name = category.replace("-", " ")).first()
     item = session.query(Item).filter_by(name = item_name.replace("-", " "), cat_id = cat.id).first()
     
-    if request.method == 'GET':        
+    if request.method == 'GET':
+        print("Get page category is " +category)
         if 'access_token' in login_session:
             categories = session.query(Categories).all()
-            return render_template('editItem.html',
+            return render_template('edititem.html',
                                    categories = categories,
                                    item = item,
                                    category = category)
@@ -258,7 +259,8 @@ def editItem(category, item_name):
             item.description = request.form['description']
         if request.form['category']:
             item.cat_id = int(request.form['category'])
-            category = request.form['category'].replace(" ", "-")
+            category = session.query(Categories).filter_by(id = item.cat_id)\
+                       .first().name.replace(" ", "-")
         
         item.time_updated = dt.now()
         session.add(item)

@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime as dt
 from create_database import Categories as category, Base, Item, User
 
-engine = create_engine('sqlite:///item_catalogue.db')
+engine = create_engine('sqlite:///catalogue.db')
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance
 Base.metadata.bind = engine
@@ -91,7 +91,7 @@ snowboard = Item(name="Concrete snowboard",
 gopro = Item(name="GoPro camera", 
             description="Because it didn't happen if you don't have the video.\
                         All your friends LOVE to watch the tip of your snowboard\
-                        for three hours"
+                        for three hours",
             time_updated = dt.now(),
             category=snowboarding,
             user = user1)
@@ -106,8 +106,8 @@ skates = Item(name="Ice skates",
             time_updated = dt.now(),
             category=skating,
             user = user1)
-bandaid = Item(name="Band-aid", 
-            description="Nice to have when you cut yourself of your skates"
+bandaid = Item(name="Band aid", 
+            description="Nice to have when you cut yourself of your skates",
             time_updated = dt.now(),
             category=skating,
             user = user1)
