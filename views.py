@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
 Created on Wed Mar 28 11:26:14 2018
 
@@ -251,7 +251,7 @@ def editItem(category, item_name):
         else:
             flash("Please log in to add and edit items")
             return redirect(url_for('itemsPage', category = category))
-        
+
     elif request.method == 'POST':
         if request.form['name']:
             item.name = request.form['name']

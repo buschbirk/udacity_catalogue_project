@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 """
 Created on Tue Mar 13 21:07:32 2018
 
@@ -106,7 +106,7 @@ skates = Item(name="Ice skates",
             time_updated = dt.now(),
             category=skating,
             user = user1)
-bandaid = Item(name="Band aid", 
+bandaid = Item(name="Band aid",
             description="Nice to have when you cut yourself of your skates",
             time_updated = dt.now(),
             category=skating,
