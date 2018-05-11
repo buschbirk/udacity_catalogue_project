@@ -44,6 +44,10 @@ hr {
   border-bottom: solid 1px #06b3e440;
 }
 
+img {
+  width: 100%;
+}
+
 p,
 dd,
 dt {
@@ -277,4 +281,12 @@ a {
   font-size: 1em;
   cursor: pointer;
   background-color: white;
+}
+
+@media screen and (max-width: 599px) {
+    img {width: 125%; margin: 0 -4em;}
+    .block {overflow: hidden;}
+    .categories {width: 90%; border-right: 0;}
+    .recent_items {width: 90%; border-right: 0;}
+    .block {font-size: 0.8em;}
 }
