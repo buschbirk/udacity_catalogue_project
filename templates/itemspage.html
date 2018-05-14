@@ -6,7 +6,6 @@
   <div class="centered">{{category.name}}</div>
 </div>
 
-
 <div class="categories">
   <h1>Categories</h1>
   {% for i in categories %}
@@ -20,11 +19,9 @@
       </a>
     {% endif %}
   {% endfor %}
-
 </div>
 
-
-<div class="recent_items">
+<div class="item_feed">
   <h1>{{category.name}} items: ({{len_items}} items)</h1>
   {% for i in items %}
   <div class="item">
@@ -33,7 +30,6 @@
     </a>
   </div>
   {% endfor %}
-
 </div>
 
 <div class="clear"></div>

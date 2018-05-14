@@ -7,16 +7,13 @@
 </div>
 
 <form action="{{ url_for('deleteCategory', category = category.name.replace(" ", "-"))}}" method = 'post'>
-
-  <div class="menu_item">
-
+  <div class="item">
     <p class="item_title">Are you sure you want to delete ''{{category.name.replace("-", " ")}}''?</p>
     <p class="item_desc">Deleting a category will also delete all it's items</p>
 
     <input type='submit' value='Delete' class="link left" id="button">
     <a href='{{ url_for('itemsPage', category = category.name.replace(" ", "-"))}}' class="link right">Cancel</a>
   </div>
-
 </form>
 
 {% endblock %}

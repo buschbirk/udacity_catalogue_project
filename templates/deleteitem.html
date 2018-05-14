@@ -7,15 +7,11 @@
 </div>
 
 <form action="{{ url_for('deleteItem', category = category, item_name = item_name)}}" method = 'post'>
-
-  <div class="menu_item">
-
+  <div class="item">
     <p class="item_title">Are you sure you want to delete {{item_name.replace("-", " ")}}?</p>
-
     <input type='submit' value='Delete' class="link left" id="button">
     <a href='{{ url_for('itemsPage', category = category)}}' class="link right">Cancel</a>
   </div>
-
 </form>
 
 {% endblock %}

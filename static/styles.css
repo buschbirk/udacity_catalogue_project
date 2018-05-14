@@ -61,8 +61,6 @@ a {
     margin-right: 1em;
 }
 
-
-
 .block {
   position: relative;
   text-align: center;
@@ -77,7 +75,6 @@ a {
     color: white;
     text-shadow: 5px 4px 4px #000000;
 }
-
 
 .link {
   padding-top: 1.5em;
@@ -106,9 +103,7 @@ a {
   border-bottom: 0;
 }
 
-
-
-.recent_items {
+.item_feed {
   float: left;
   padding: 1em;
   width: 50%;
@@ -130,7 +125,7 @@ a {
     text-align: center;
 }
 
-.menu_item {
+.item {
   background-color: white;
   position: relative;
   width: 70%;
@@ -195,8 +190,6 @@ a {
   font-size: 1em;
 }
 
-
-
 .left {
   width: 50%;
   bottom: 0;
@@ -231,22 +224,22 @@ a {
   background-color: #06b3e4;
 }
 
+#add_item {
+  margin: 0 auto;
+  width: 85%;
+}
+
 .name {
     width: 50%;
     display: inline-block;
     float: left;
 }
 
-.description {}
-
 .price {
     text-align: right;
     width: 50%;
     float: right;
 }
-
-.editdeletepane {}
-
 
 .input_text {
   display: block;
@@ -259,7 +252,6 @@ a {
   margin: 0 auto 2em;
   color: #6f6d6d;
 }
-
 
 .edit_text {
   margin: 1em auto;
@@ -287,6 +279,6 @@ a {
     img {width: 125%; margin: 0 -4em;}
     .block {overflow: hidden;}
     .categories {width: 90%; border-right: 0;}
-    .recent_items {width: 90%; border-right: 0;}
+    .item_feed {width: 90%; border-right: 0;}
     .block {font-size: 0.8em;}
 }

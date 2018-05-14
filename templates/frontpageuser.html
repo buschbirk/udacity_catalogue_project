@@ -6,7 +6,6 @@
   <div class="centered">Categories</div>
 </div>
 
-
 <div class="categories">
   <h1>Categories</h1>
   {% for i in categories %}
@@ -17,8 +16,7 @@
   <a href="{{url_for('addCategory')}}" class="add_new">Add new category</a>
 </div>
 
-
-<div class="recent_items">
+<div class="item_feed">
   <h1>Recent items</h1>
   {% for i in latest_items %}
   <div class="item">
@@ -27,7 +25,9 @@
     </a>
   </div>
   {% endfor %}
-  <a href="{{url_for('addItem', category="none")}}" class="add_new">Add new item</a>
+  <div class="item">
+    <a href="{{url_for('addItem', category="none")}}" class="add_new" id="add_item">Add new item</a>
+  </div>
 </div>
 
 <div class="clear"></div>

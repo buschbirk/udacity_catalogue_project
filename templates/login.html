@@ -2,15 +2,12 @@
 <html>
 <head>
   <link rel=stylesheet type=text/css href="{{url_for('static', filename='styles.css')}}">
-</head>
-
-<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script src="//apis.google.com/js/platform.js?onload=start"> </script>
   <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
 </head>
-
 
 <body>
   {% include "header.html" %}
@@ -21,10 +18,9 @@
   </div>
 
 <!-- GOOGLE PLUS SIGN IN BUTTON-->
-<div class="menu_item">
-
+<div class="item">
   <p class="item_title">Log in with Google</p>
-
+  <p class="edit_text" id="status"></p>
   <div id="signinButton">
     <span class="g-signin"
       data-scope="openid email"
@@ -37,18 +33,15 @@
     </span>
   </div>
   <div id="result"></div>
-
 </div>
 
-<!--END GOOGLE PLUS SIGN IN BUTTON -->
 <script>
   function signInCallback(authResult) {
     if (authResult['code']) {
-      //hide the sign-in BUTTON
+      // hide the sign-in BUTTON
       $('#signinButton').attr('style', 'display: none');
-      //send the one-time code to the server, if the server responds,
-      //write a 'login succesful' message to the page
-      //and then redirect back to the main restaurants postmessage
+      // send the one-time code to the server, if the server responds,
+      // redirect back to the main restaurants postmessage
       $.ajax({
         type: 'POST',
         url: '/gconnect?state={{STATE}}',
@@ -57,24 +50,28 @@
         data: authResult['code'],
         success: function(result) {
           if (result) {
-            console.log("Succesful login attempt");
-            window.location.replace("/catalog/auth_completed");
-        } else if (authResult['error']) {
-          console.log('There was an error: ' + authResult['error']);
-        } else {
-          $('#result').html('Failed to make a server-side call. \
-                            Check your configuration and console')
+            $('#status').html('Succesful login. Redirecting...');
+            setTimeout(function() {
+              window.location.replace("/catalog/auth_completed");
+            }, 1500);
+          } else if (authResult['error']) {
+            console.log('There was an error: ' + authResult['error']);
+            $('#status').html('There was an error logging you in. Try again');
+            setTimeout(function() {
+              window.location.replace("/login");
+            }, 1500);
+          } else {
+            $('#status').html('Failed to make a server-side call. \
+                            Check your configuration and console');
+            setTimeout(function() {
+              window.location.replace("/login");
+            }, 1500);
+          }
         }
-        }
-      })
+      });
     }
   }
-
 </script>
-
-
-<div id="status">
-</div>
 
 </body>
 
