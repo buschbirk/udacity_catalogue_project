@@ -13,8 +13,10 @@
       <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link highlight" style="color: black; font-weight: 800;">
         {{i.name}}
       </a>
-      <a href='{{ url_for('editCategory', category = category.name.replace(" ", "-")) }}'>Edit</a>
-      <a href='{{ url_for('deleteCategory', category = category.name.replace(" ", "-")) }}'>Delete</a>
+      {% if i.user_id == user_id %}
+        <a href='{{ url_for('editCategory', category = category.name.replace(" ", "-")) }}'>Edit</a>
+        <a href='{{ url_for('deleteCategory', category = category.name.replace(" ", "-")) }}'>Delete</a>
+      {% endif %}
       <hr />
     {% else %}
       <a href="{{url_for('itemsPage', category = i.name.replace(" ", "-"))}}" class="category link">

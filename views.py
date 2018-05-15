@@ -8,6 +8,7 @@ Created on Wed Mar 28 11:26:14 2018
 from flask import Flask, render_template, request, redirect, jsonify, url_for
 from flask import flash, make_response
 from flask import session as login_session
+from functools import wraps
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -34,6 +35,18 @@ engine = create_engine('sqlite:///catalogue.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+# Create a decorator for pages with required login
+def login_required(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        if 'access_token' in login_session:
+            return function(*args, **kwargs)
+        else:
+            flash('A user must be logged to add a new item.')
+            return redirect(url_for('frontPage'))
+    return wrapper
 
 
 @app.route('/')
@@ -66,7 +79,7 @@ def authFinished():
     return redirect(url_for('frontPage'))
 
 
-@app.route('/catalog.json')
+@app.route('/catalog.json/')
 def catalogJson():
     """ Export JSON data for all categories """
 
@@ -88,7 +101,8 @@ def itemsPage(category):
                                categories=all_categories,
                                items=items,
                                category=cat,
-                               len_items=str(len(items)))
+                               len_items=str(len(items)),
+                               user_id=login_session['user_id'])
     else:
         return render_template('itemspage.html',
                                categories=all_categories,
@@ -107,15 +121,12 @@ def categoryJson(category):
 
 
 @app.route('/catalog/category/add/', methods=['GET', 'POST'])
+@login_required
 def addCategory():
     """ Handles requests for adding a category """
 
     if request.method == 'GET':
-        if 'access_token' in login_session:
-            return render_template('addcategory.html')
-        else:
-            flash("Please sign in to edit and delete categories")
-            return redirect(url_for('frontPage'))
+        return render_template('addcategory.html')
 
     if request.method == 'POST':
         if request.form['name']:
@@ -132,6 +143,7 @@ def addCategory():
 
 
 @app.route('/catalog/<category>/edit/', methods=['GET', 'POST'])
+@login_required
 def editCategory(category):
     """ Handles requests for editing a category """
 
@@ -139,11 +151,11 @@ def editCategory(category):
           name=category.replace("-", " ")).one()
 
     if request.method == 'GET':
-        if 'access_token' in login_session:
+        if login_session['user_id'] == cat.user_id:
             return render_template('editcategory.html',
                                    category=cat)
         else:
-            flash("Please sign in to edit and delete categories")
+            flash("You are not the author of this category")
             return redirect(url_for('frontPage'))
 
     if request.method == 'POST':
@@ -159,6 +171,7 @@ def editCategory(category):
 
 
 @app.route('/catalog/<category>/delete/', methods=['GET', 'POST'])
+@login_required
 def deleteCategory(category):
     """ Handles requests for deleting a category """
 
@@ -166,11 +179,11 @@ def deleteCategory(category):
           name=category.replace("-", " ")).one()
 
     if request.method == 'GET':
-        if 'access_token' in login_session:
+        if login_session['user_id'] == cat.user_id:
             return render_template('deletecategory.html',
                                    category=cat)
         else:
-            flash("Please sign in to edit and delete categories")
+            flash("You are not the author of this category")
             return redirect(url_for('itemsPage', category=category))
     if request.method == 'POST':
         items = session.query(Item).filter_by(cat_id=cat.id).all()
@@ -196,7 +209,8 @@ def itemPage(category, item_name):
                                              .replace("-", " "),
                                              cat_id=cat.id).first()
         return jsonify(item.serialize)
-    elif 'access_token' in login_session:
+    elif 'access_token' in login_session\
+    and login_session['user_id'] == cat.user_id:
         return render_template('itempageuser.html',
                                item=item,
                                category=category)
@@ -206,21 +220,24 @@ def itemPage(category, item_name):
 
 
 @app.route('/catalog/<category>/items/add/', methods=['GET', 'POST'])
+@login_required
 def addItem(category):
     """ Handles requests for adding an item """
 
+    user_categories = session.query(Categories).filter_by(
+                      user_id=login_session['user_id']).all()
+
     if request.method == 'GET':
-        if 'access_token' in login_session:
-            categories = session.query(Categories).all()
-            return render_template('addItem.html',
-                                   categories=categories,
-                                   category_name=category)
-        elif category == 'none':
-            flash("Please log in to add and edit items")
-            return redirect(url_for('frontPage'))
+        if len(user_categories) == 0:
+            flash('You need to be the author of a category to add items')
+            if category == 'none':
+                return redirect(url_for('frontPage'))
+            else:
+                return redirect(url_for('itemsPage', category=category))
         else:
-            flash("Please log in to add and edit items")
-            return redirect(url_for('itemsPage', category=category))
+            return render_template('addItem.html',
+                                   categories=user_categories,
+                                   category_name=category)
 
     if request.method == 'POST':
         if not request.form['name']:
@@ -250,6 +267,7 @@ def addItem(category):
 
 @app.route('/catalog/<category>/items/<item_name>/edit/',
            methods=['GET', 'POST'])
+@login_required
 def editItem(category, item_name):
     """ Handles requests for editing an item """
 
@@ -257,18 +275,21 @@ def editItem(category, item_name):
           name=category.replace("-", " ")).first()
     item = session.query(Item).filter_by(
            name=item_name.replace("-", " "), cat_id=cat.id).one()
+    user_categories = session.query(Categories).filter_by(
+                      user_id=login_session['user_id']).all()
 
     if request.method == 'GET':
-        print("Get page category is " + category)
-        if 'access_token' in login_session:
-            categories = session.query(Categories).all()
+        if len(user_categories) == 0:
+            flash('You need to be the author of a category to edit items')
+            return redirect(url_for('itemsPage', category=category))
+        elif login_session['user_id'] != item.user_id:
+            flash("You don't have permission to edit this item")
+            return redirect(url_for('itemsPage', category=category))
+        else:
             return render_template('edititem.html',
-                                   categories=categories,
+                                   categories=user_categories,
                                    item=item,
                                    category=category)
-        else:
-            flash("Please log in to add and edit items")
-            return redirect(url_for('itemsPage', category=category))
 
     elif request.method == 'POST':
         if request.form['name']:
@@ -291,6 +312,7 @@ def editItem(category, item_name):
 
 @app.route('/catalog/<category>/items/<item_name>/delete/',
            methods=['GET', 'POST'])
+@login_required
 def deleteItem(category, item_name):
     """ Handles requests for deleting an item """
 
@@ -300,15 +322,21 @@ def deleteItem(category, item_name):
                                          cat_id=cat.id).first()
 
     if request.method == 'GET':
-        return render_template('deleteitem.html',
-                               category=category,
-                               item_name=item_name)
+        if login_session['user_id'] == item.user_id:
+            return render_template('deleteitem.html',
+                                   category=category,
+                                   item_name=item_name)
+        else:
+            flash("You don't have permission to delete this item")
+            return redirect(url_for('itemsPage',
+                                category=category))
+
     elif request.method == 'POST':
         session.delete(item)
         session.commit()
         flash("Successfully deleted item: " + item.name)
         return redirect(url_for('itemsPage',
-                                category=category,))
+                                category=category))
 
 
 @app.route('/login')
@@ -431,7 +459,6 @@ def gconnect():
         login_session['user_id'] = createUser(login_session)
 
     flash("you are now logged in as %s" % login_session['username'])
-    print("Finished Oauth flow")
 
     return redirect(url_for('frontPage'))
 
