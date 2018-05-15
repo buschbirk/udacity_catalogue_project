@@ -46,21 +46,23 @@ In your virtual environment:
 ```
 python views.py
 ```
-You can now access your site at http://localhost:5000/
+You can now access your site at [http://localhost:5000/](http://localhost:5000/)
 
 ## Examples
 
 ### Front page
-Located at http://localhost:5000/
+Located at [http://localhost:5000/](http://localhost:5000/)  
+
 ![Screenshot of the front page](https://i.gyazo.com/5050a7363dd2725873df16190f9e5c9c.jpg)
 
 ### Item page for the author of an item
-Example url: http://localhost:5000/catalog/Hockey/items/Hockey-Puck/
+Example url: http://localhost:5000/catalog/Hockey/items/Hockey-Puck/  
+
 ![Screenshot of item page for logged in user](https://i.gyazo.com/ac566abce102bf7f07a1aeca0f982f49.jpg)
 
 ### JSON exports
-Export all categories and items:
-http://localhost:8000/catalog.json/
+Export all categories and items:  
+[http://localhost:8000/catalog.json/](http://localhost:8000/catalog.json/)  
 Response:
 ```
 {
@@ -111,13 +113,15 @@ Response:
     },
 ```
 
-Export items in one category:
-http://localhost:8000/catalog/<CATEGORY_NAME>.json
-Response will be similar to the above
+Export items in one category:  
+[http://localhost:8000/catalog/<CATEGORY_NAME>.json](http://localhost:8000/catalog/<CATEGORY_NAME>.json)  
+Response will be similar to the above  
 
-Export one item:
-http://localhost:8000/catalog/<CATEGORY_NAME>/<ITEM_NAME>.json
-Response:
+
+Export one item:  
+[http://localhost:8000/catalog/<CATEGORY_NAME>/<ITEM_NAME>.json](http://localhost:8000/catalog/<CATEGORY_NAME>/<ITEM_NAME>.json)  
+Response:  
+
 ```
 {
     "category_id": 5,
