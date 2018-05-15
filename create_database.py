@@ -62,7 +62,8 @@ class Item(Base):
         """Return item data in easily serializeable format"""
         return {
             'name': self.name,
-            'description': self.description.replace("                         ", " "),
+            'description': self.description.replace("                         ",
+                                                    " "),
             'id': self.id,
             'category_id': self.cat_id,
             'last_update': self.time_updated,

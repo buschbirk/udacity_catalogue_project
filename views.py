@@ -210,7 +210,7 @@ def itemPage(category, item_name):
                                              cat_id=cat.id).first()
         return jsonify(item.serialize)
     elif 'access_token' in login_session\
-    and login_session['user_id'] == cat.user_id:
+            and login_session['user_id'] == cat.user_id:
         return render_template('itempageuser.html',
                                item=item,
                                category=category)
@@ -329,7 +329,7 @@ def deleteItem(category, item_name):
         else:
             flash("You don't have permission to delete this item")
             return redirect(url_for('itemsPage',
-                                category=category))
+                                    category=category))
 
     elif request.method == 'POST':
         session.delete(item)
