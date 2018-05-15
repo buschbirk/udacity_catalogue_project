@@ -66,51 +66,52 @@ Export all categories and items:
 Response:
 ```
 {
-  "Categories": [
-    {
-      "id": 1,
-      "items": [
+    "Categories": [
         {
-          "category_id": 1,
-          "description": "An ideal ball for players taking their first steps                         onto the pitch, the Soccer Ball is a solid, durable                         go-to that handles the rigors of tough shooting and                         skill drills while celebrating the sport's iconic                         tournament.",
-          "id": 1,
-          "last_update": "Fri, 11 May 2018 14:08:53 GMT",
-          "name": "Soccer ball",
-          "user_id": 1
+            "id": 1,
+            "items": [
+                {
+                    "category_id": 1,
+                    "description": "An ideal ball for players taking their first steps onto the pitch, the Soccer Ball is a solid, durable go-to that handles the rigors of tough shooting and skill drills while celebrating the sport's iconic tournament.",
+                    "id": 1,
+                    "last_update": "Fri, 11 May 2018 14:08:53 GMT",
+                    "name": "Soccer ball",
+                    "user_id": 1
+                },
+                {
+                    "category_id": 1,
+                    "description": "Equipped with a smooth latex foam palm, the Nike Adult Match Goalkeeper Soccer Goalie Gloves offer reliable impact protection and consistent grip so you can block the hardest shots in any weather conditions.",
+                    "id": 2,
+                    "last_update": "Fri, 11 May 2018 14:08:53 GMT",
+                    "name": "Goalkeeper Gloves",
+                    "user_id": 1
+                }
+            ],
+            "name": "Soccer"
         },
         {
-          "category_id": 1,
-          "description": "Equipped with a smooth latex foam palm, the Nike                         Adult Match Goalkeeper Soccer Goalie Gloves offer                         reliable impact protection and consistent grip so                         you can block the hardest shots in any weather                         conditions.",
-          "id": 2,
-          "last_update": "Fri, 11 May 2018 14:08:53 GMT",
-          "name": "Goalkeeper Gloves",
-          "user_id": 1
+            "id": 2,
+            "items": [
+                {
+                    "category_id": 2,
+                    "description": "An all-in-one package that includes an easy-to-use air pump to maintain the perfect inflation",
+                    "id": 3,
+                    "last_update": "Fri, 11 May 2018 14:08:53 GMT",
+                    "name": "A pretty good basketball",
+                    "user_id": 1
+                },
+                {
+                    "category_id": 2,
+                    "description": "Don't dunk on this one. It is going to break",
+                    "id": 4,
+                    "last_update": "Fri, 11 May 2018 14:08:53 GMT",
+                    "name": "Very fragile basketball hoop",
+                    "user_id": 1
+                }
+            ],
+            "name": "Basketball"
         }
-      ],
-      "name": "Soccer"
-    },
-    {
-      "id": 2,
-      "items": [
-        {
-          "category_id": 2,
-          "description": "An all-in-one package that includes an easy-to-use                         air pump to maintain the perfect inflation",
-          "id": 3,
-          "last_update": "Fri, 11 May 2018 14:08:53 GMT",
-          "name": "A pretty good basketball",
-          "user_id": 1
-        },
-        {
-          "category_id": 2,
-          "description": "Don't dunk on this one. It is going to break",
-          "id": 4,
-          "last_update": "Fri, 11 May 2018 14:08:53 GMT",
-          "name": "Very fragile basketball hoop",
-          "user_id": 1
-        }
-      ],
-      "name": "Basketball"
-    },
+      ...
 ```
 
 Export items in one category:  
