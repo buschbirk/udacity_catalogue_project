@@ -72,7 +72,7 @@ class Item(Base):
 
 
 # Initialize db engine
-engine = create_engine('sqlite:///catalogue.db')
+engine = create_engine('postgresql://catalog:catalogPass@localhost:5432/itemcatalog')
 Base.metadata.create_all(engine)
 
 DBSession = sessionmaker(bind=engine)
