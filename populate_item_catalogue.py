@@ -11,7 +11,7 @@ from datetime import datetime as dt
 from create_database import Categories as category, Base, Item, User
 
 # Initialize db engine
-engine = create_engine('sqlite:///catalogue.db')
+engine = create_engine('postgresql://catalog:catalogPass@localhost:5432/itemcatalog')
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance
 Base.metadata.bind = engine
